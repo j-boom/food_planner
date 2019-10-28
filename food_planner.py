@@ -1,4 +1,4 @@
-from helpers import add_food, display_day
+from helpers import add_food, display_day, add_food_to_db
 
 breakfast = []
 lunch = []

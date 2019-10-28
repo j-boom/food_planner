@@ -1,3 +1,5 @@
+import sqlite3
+
 #---------------------------------- CLASS DEFINITIONS ------------------------------------------#
 class Error(Exception):
     """Base Class for other exceptions"""
@@ -56,3 +58,47 @@ def add_food(breakfast, lunch, dinner, snacks):
 #---------------------------------------- RENDER VISUAL DEPICTION OF FOOD PLAN ------------------------------
 def display_day():
     print(breakfast, lunch, dinner, snacks)
+
+
+#---------------------------------------- ADD FOOD TO SQLite Database ----------------------------------------
+
+def add_food_to_db():
+
+    def to_bool(answer):
+        if answer.lower() == 'y' or answer.lower() == 'yes':
+            return True
+        else: 
+            return False
+
+    name = input("Food name: ")
+    serving = input("Basic serving: ")
+    carbs = float(input("How many grams of carbs in a serving? "))
+    fat = float(input("How many grams of fat in a serving? "))
+    protein = float(input("How many grams of protein in a serving? "))
+    fiber = float(input("How many grams of fiber in a serving? "))
+    breakfast = to_bool(input("Would you eat this food for breakfast? (yes or no): "))
+    lunch = to_bool(input("Would you eat this food for lunch? (yes or no): "))
+    dinner = to_bool(input("Would you eat this food for dinner? (yes or no): "))
+    snacks = to_bool(input("Would you eat this food for a snack? (yes or no):"))
+
+    try:
+        connection = sqlite3.connect("food_database.db")
+        cursor = connection.cursor()
+        print("Successfully connected to SQlite")
+
+        sqlite_insert_query = f"""INSERT INTO food 
+                                    ('name', 'serving', 'carbs', 'fat', 'protein', 'fiber', 'breakfast', 'lunch', 'dinner', 'snacks')
+                                    VALUES 
+                                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+        data_tuple = (name, serving, carbs, fat, protein, fiber, breakfast, lunch, dinner, snacks)
+        cursor.execute(sqlite_insert_query, data_tuple)
+        connection.commit()
+        print ("Records created successfully")
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table: ", error)
+
+    finally:
+        if connection:
+            connection.close()
+            print("The SQLite connection is closed")  
