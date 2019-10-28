@@ -36,13 +36,19 @@ def add_food(breakfast, lunch, dinner, snacks):
         dinner.append(food)
     else:
         snacks.append(food)
+    
+    multiple()
 
-    multiple = input("Do you want to add another? (y/n): ")
-    if multiple in 'yn':
-        if multiple == 'y':
-            add_food(breakfast, lunch, dinner, snacks)
-        else:
-            pass
+    def multiple():
+        multiple = input("Do you want to add another? (y/n): ")
+        if multiple in 'yn':
+            if multiple == 'y':
+                add_food(breakfast, lunch, dinner, snacks)
+            elif multiple == 'n':
+                pass
+            else:
+                print("Try again: ")
+                multiple()        
 
     return breakfast, lunch, dinner, snacks
 
