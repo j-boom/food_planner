@@ -102,3 +102,5 @@ def add_food_to_db():
         if connection:
             connection.close()
             print("The SQLite connection is closed")  
+
+# ------------------------------------------------------------ Add Food --------------------------------------------------
