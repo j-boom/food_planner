@@ -1,4 +1,4 @@
-import sqlite3
+
 
 #---------------------------------- CLASS DEFINITIONS ------------------------------------------#
 class Error(Exception):
@@ -63,6 +63,7 @@ def display_day():
 #---------------------------------------- ADD FOOD TO SQLite Database ----------------------------------------
 
 def add_food_to_db():
+    import sqlite3
 
     def to_bool(answer):
         if answer.lower() == 'y' or answer.lower() == 'yes':
@@ -104,3 +105,26 @@ def add_food_to_db():
             print("The SQLite connection is closed")  
 
 # ------------------------------------------------------------ Add Food --------------------------------------------------
+
+# ---------------------------------------------------------- GET FOOD FROM HELLOFRESH ------------------------------------
+def hello_fresh(url):
+    import requests
+    import urllib.request
+    import datetime
+    from bs4 import BeautifulSoup
+
+    year = datetime.date.today().year
+    week = datetime.date.today().isocalendar()[1] + 1
+
+    #url = f'https://www.hellofresh.com/my-account/deliveries/menu/{year}-W{week}'
+    #url = "https://www.hellofresh.com/recipes/firecracker-meatballs-5d892f029421962e5476df7b?week=2019-W45"
+    response = requests.get(url)
+
+    ingredients = []
+  
+    soup = BeautifulSoup(response.text, "html.parser")
+    for each in soup.select('p[class*="dsa dsbv dshm"]'):
+        ingredients.append(each)
+    print(ingredients)
+
+hello_fresh("https://www.hellofresh.com/recipes/firecracker-meatballs-5d892f029421962e5476df7b?week=2019-W45")
