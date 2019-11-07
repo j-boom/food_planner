@@ -14,43 +14,24 @@ Will return a macro-balanced food plan and grocery list.
 | MEAL | Food | Quantity | CARBS | FAT | PROTEIN | FIBER|
 |------|------|----------|-------|-----|---------|------|
 |Breakfast| blank | blank | SUM(BREAKFAST_CARBS)| SUM(BREAKFAST_FAT)|SUM(BREAKFAST_PROTEIN)| SUM(BREAKFAST_FIBER)|
-|------|------|----------|-------|-----|---------|------|
 |food 1    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 2    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 3    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food n    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |Lunch| blank | blank | SUM(LUNCH_CARBS)| SUM(LUNCH_FAT)|SUM(LUNCH_PROTEIN)| SUM(LUNCH_FIBER)|
-|------|------|----------|-------|-----|---------|------|
 |food 1    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 2    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 3    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food n    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |Dinner| blank | blank | SUM(Dinner_CARBS)| SUM(Dinner_FAT)|SUM(Dinner_PROTEIN)| SUM(Dinner_FIBER)|
-|------|------|----------|-------|-----|---------|------|
 |food 1    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 2    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 3    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food n    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |Snacks| blank | blank | SUM(Snacks_CARBS)| SUM(Snacks_FAT)|SUM(Snacks_PROTEIN)| SUM(Snacks_FIBER)|
-|------|------|----------|-------|-----|---------|------|
 |food 1    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 2    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food 3    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
-|------|------|----------|-------|-----|---------|------|
 |food n    | name  |  var(qty) | base serv * qty carbs| base serv * qty fat| base serv * qty protein| base serv * qty fiber|
 
 ## Constraints for constraint propagation problem
