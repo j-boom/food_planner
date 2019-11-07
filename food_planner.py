@@ -1,4 +1,5 @@
-from helpers import add_food, display_day, add_food_to_db
+from helpers import add_food, display_day, add_food_to_db, hello_fresh
+import sqlite3, datetime
 
 """
 This is definitely going to be a constraint propagation problem.  Constraints off the top of my head (generalized):
@@ -12,14 +13,7 @@ This is definitely going to be a constraint propagation problem.  Constraints of
 8.  Snacks can add food 
 """
 
+hello_fresh(url)
 
-
-breakfast = []
-lunch = []
-dinner = []
-snacks = []   
-
-
-
-add_food(breakfast, lunch, dinner, snacks)
-print(breakfast, lunch, dinner, snacks)
+for ingredient in ingredients:
+    add_food(ingredient)

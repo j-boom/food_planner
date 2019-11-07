@@ -1,32 +1,10 @@
+#! Python 3
 
+import datetime
+from sqlite_functions import get_food
 
-#---------------------------------- CLASS DEFINITIONS ------------------------------------------#
-class Error(Exception):
-    """Base Class for other exceptions"""
-    pass
-
-class WrongMeal(Error):
-    """Raised when user didn't input the correct meal name"""
-    pass
-
-class Food:
-    def __init__(self, name, protein, carbs, fat, fiber, sugar):
-        self.name = name
-        self.protein = protein
-        self.carbs = carbs
-        self.fat = fat
-        self.fiber = fiber
-        self.sugar = sugar
-        self.meals = []
-        self.genres = []
-        
-    def __repr__(self):
-        return f"{self.name} has {self.protein} grams of protein, {self.carbs} grams of carbs, and {self.fat} grams of fat"
-
-    def add_food(self, name, protein, carbs, fat, fiber, sugar):
-        pass
-#--------------------------------- ADD FOOD TO FRAMEWORK OF MEALS -------------------------------#
-def add_food(breakfast, lunch, dinner, snacks):
+#--------------------------------- MANUALLY ADD FOOD BY INGREDIENT TO FRAMEWORK OF MEALS -------------------------------#
+def add_food_by_ingredient(breakfast, lunch, dinner, snacks):
     food = input("Enter a food: ")
     meal = int(input("Which meal does it go in? 1: breakfast, 2: lunch, 3: dinner, 4: snacks "))
     
@@ -54,63 +32,10 @@ def add_food(breakfast, lunch, dinner, snacks):
 
     return breakfast, lunch, dinner, snacks
 
-
-#---------------------------------------- RENDER VISUAL DEPICTION OF FOOD PLAN ------------------------------
-def display_day():
-    print(breakfast, lunch, dinner, snacks)
-
-
-#---------------------------------------- ADD FOOD TO SQLite Database ----------------------------------------
-
-def add_food_to_db():
-    import sqlite3
-
-    def to_bool(answer):
-        if answer.lower() == 'y' or answer.lower() == 'yes':
-            return True
-        else: 
-            return False
-
-    name = input("Food name: ")
-    serving = input("Basic serving: ")
-    carbs = float(input("How many grams of carbs in a serving? "))
-    fat = float(input("How many grams of fat in a serving? "))
-    protein = float(input("How many grams of protein in a serving? "))
-    fiber = float(input("How many grams of fiber in a serving? "))
-    breakfast = to_bool(input("Would you eat this food for breakfast? (yes or no): "))
-    lunch = to_bool(input("Would you eat this food for lunch? (yes or no): "))
-    dinner = to_bool(input("Would you eat this food for dinner? (yes or no): "))
-    snacks = to_bool(input("Would you eat this food for a snack? (yes or no):"))
-
-    try:
-        connection = sqlite3.connect("food_database.db")
-        cursor = connection.cursor()
-        print("Successfully connected to SQlite")
-
-        sqlite_insert_query = f"""INSERT INTO food 
-                                    ('name', 'serving', 'carbs', 'fat', 'protein', 'fiber', 'breakfast', 'lunch', 'dinner', 'snacks')
-                                    VALUES 
-                                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
-        data_tuple = (name, serving, carbs, fat, protein, fiber, breakfast, lunch, dinner, snacks)
-        cursor.execute(sqlite_insert_query, data_tuple)
-        connection.commit()
-        print ("Records created successfully")
-
-    except sqlite3.Error as error:
-        print("Failed to insert data into sqlite table: ", error)
-
-    finally:
-        if connection:
-            connection.close()
-            print("The SQLite connection is closed")  
-
-# ------------------------------------------------------------ Add Food --------------------------------------------------
-
 # ---------------------------------------------------------- GET FOOD FROM HELLOFRESH ------------------------------------
 def hello_fresh(url):
     import requests
     import urllib.request
-    import datetime
     from bs4 import BeautifulSoup
 
     year = datetime.date.today().year
@@ -127,4 +52,14 @@ def hello_fresh(url):
         ingredients.append(each)
     print(ingredients)
 
-hello_fresh("https://www.hellofresh.com/recipes/firecracker-meatballs-5d892f029421962e5476df7b?week=2019-W45")
+    return ingredients
+
+#---------------------------------------- RENDER VISUAL DEPICTION OF FOOD PLAN ------------------------------
+def display_day():
+    print(breakfast, lunch, dinner, snacks)
+
+# ------------------------------------ Add food to tracker ---------------------------------------------------------------------------------
+
+def add_food_to_tracker(name):
+    database = 'food_database.db'
+    get_food(name, database)
