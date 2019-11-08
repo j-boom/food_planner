@@ -38,7 +38,7 @@ def get_food(name, database):
     with connection:
         sqlite_insert_query = f"""SELECT *
         FROM food
-        WHERE name = ?;"""
+        WHERE na = ?;"""
         cursor.execute(sqlite_insert_query, (name,))
         data = cursor.fetchone()
         if data is None: 
@@ -56,6 +56,7 @@ def create_connection(database):
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
         print("Successfully connected to SQLite")
+        print(type(connection))
     except Error as e:
         print(e)
 
@@ -67,3 +68,4 @@ def close_connection():
         print('The SQLite Connection is closed')
 
 
+get_food("Apple, honeycrisp", "food_database.db")
