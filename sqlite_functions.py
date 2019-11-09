@@ -32,7 +32,7 @@ def add_food_to_db(name = ""):
     print ("Records created successfully")
 
 # ---------------------------------------- GET FOOD FROM SQLITE DATABASE -------------------------------------------------------
-
+'''
 def get_food(name, database):
     create_connection(database)
     with connection:
@@ -47,7 +47,7 @@ def get_food(name, database):
         else: 
             return data
     close_connection()
-
+'''
 # --------------------------------------- Functions for SQLite Connection -------------------------------------------------------
 
 def create_connection(database):
@@ -69,3 +69,31 @@ def close_connection():
 
 
 get_food("Apple, honeycrisp", "food_database.db")
+
+def sql_connect(database, command, data_tuple):
+    connection = None
+    data = ()
+
+    try:
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+        print(f'Successfully connected to {database}')
+  
+        if "INSERT" in command:
+            print("INSERT FOUND")
+            cursor.execute(command, data_tuple)
+            connection.commit()
+
+        elif "SELECT" in command:
+            print("SELECT FOUND")
+            cursor.execute(command, (f'%{data_tuple}%',))
+            data = cursor.fetchall()
+
+    except Error as e:
+        print(e)
+    
+    if connection:
+        connection.close()
+        print (f'The SQLite conneciton is closed')
+
+    return data

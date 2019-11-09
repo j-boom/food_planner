@@ -1,28 +1,13 @@
 import sqlite3
 
-
-def sql_command(database, function):
-    connection = None
-    try: 
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        print("Successfully connected to SQLite")
-        function
-        cursor.execute(sqlite_query, data_tuple)
-
-    except Error as e:
-        print(e)
-
-    return connection, cursor
-
 def to_bool(answer):
         if answer.lower() == 'y' or answer.lower() == 'yes':
             return True
         else: 
             return False
 
-def add_food_to_db(connection, cursor): 
-    really = to_bool(input("Do you want to add a food to the database? "))
+def add_food_to_db(database = "food_database.db"): 
+    really = to_bool(input("Would you like to add a food to the database? "))
     if really:
         name = input("Food name: ")
         serving = input(f"Basic serving for {name}: ")
@@ -41,75 +26,105 @@ def add_food_to_db(connection, cursor):
                                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
         data_tuple = (name, serving, carbs, fat, protein, fiber, breakfast, lunch, dinner, snacks)
 
-        cursor.execute(sqlite_insert_query, data_tuple)
-        connection.commit()
-        return True
+        sql_connect(database, sqlite_insert_query, data_tuple)
+    else: return False
+
+    return name
+
+def get_food(name = "", database="food_database.db"):    
+    if name == "":
+        name = input("Enter a food name for a search term: ")
+
+    sqlite_select_query = f"""SELECT *
+                        FROM food
+                        WHERE name LIKE ?;"""
+
+    result = sql_connect(database, sqlite_select_query, name)
+    food_item = handle_database_results(result)
+
+    return food_item
+
+def handle_database_results(database_results):
+
+    if len(database_results) == 0:
+        print(f"That wasn't found in the database")
+        add_food_to_db()
+        return False
+    
+    elif len(database_results) == 1:
+        print(database_results)
+        food_item = database_results
+        choice = to_bool(input(f"Do you want to use {database_results[0][1]}? "))
+        if choice:
+            return food_item
+        else:
+            add_food_to_db()
+            return False
 
     else:
-        return False
+        i = 0
+        for each in database_results:
+            if i < 10:
+                print (f'{i} - {each}')
+            i += 1
+        
+        which_one = input("Which one do you want to use? ")
+        if which_one in '0123456789':
+            return database_results[int(which_one)]
+        else:
+            return False
 
+def ask_for_input(meal):
+    if meal == []:
+        answer = input("Add first food: ")
+        food_item = get_food(answer)
+        if not food_item:
+            return ask_for_input(meal)
+        else:
+            meal.append(food_item)
+            return ask_for_input(meal)
+    
+    else:
+        answer = to_bool(input("Do you want to add another food? "))
+        if not answer:
+            return meal
+        else:
+            answer = input("Enter a food name: ")
+            food_item = get_food(answer)
+            if not food_item:
+                return ask_for_input(meal)
+            else: 
+                meal.append(food_item)
+                return ask_for_input(meal)
 
-def get_food(name, database):
+def sql_connect(database, command, data_tuple):
     connection = None
-    data = []
+    data = ()
 
     try:
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
-        print("Successfully connected to SQLite")
+        print(f'Successfully connected to {database}')
+  
+        if "INSERT" in command:
+            print("INSERT FOUND")
+            cursor.execute(command, data_tuple)
+            connection.commit()
+
+        elif "SELECT" in command:
+            print("SELECT FOUND")
+            cursor.execute(command, (f'%{data_tuple}%',))
+            data = cursor.fetchall()
 
     except Error as e:
-        print(e)    
-        
-    sqlite_insert_query = f"""SELECT *
-                        FROM food
-                        WHERE name LIKE ?;"""
-    cursor.execute(sqlite_insert_query, (f'%{name}%',))
-    data = cursor.fetchall()
-
-    if len(data) == 0:
-        print(f"{name} not found in database") 
-        if not add_food_to_db(connection, cursor):
-            print("Try again")
-            return False
+        print(e)
     
-    elif name != data[0][1] and len(data) == 1:
-        similar = to_bool(input(f"Do you want to use {data[0][1]}? "))
-        if similar:
-            data = data[0]
-            return data
-        else:
-            similar = to_bool(input(f'Would you like to search again? '))
-            if similar:
-                new_name = input("Enter the name of the food you would like to search: ")
-                get_food(new_name, database)
-            else:
-                if not add_food_to_db(connection, cursor):
-                    return False
-                else:
-                    get_food(name, database)
-    else:
-        cursor.execute(sqlite_insert_query, (f'%{name}%',))
-        data = cursor.fetchall()
-        i = 0
-        for each in data:
-            if i < 10:
-                print (f'{i} - {each}')
-            i += 1
-        which_one = input('Which one do you want to use? Select an option, or type "none" if none of these: ')
-
-        if which_one in "0123456789":
-            return data[int(which_one)]
-        else:
-            if not add_food_to_db(connection, cursor):
-                return False
-            else: get_food(name, database)
-
     if connection:
-        connection.close
-        print('The SQLite Connection is closed')
+        connection.close()
+        print (f'The SQLite connection is closed')
 
+    return data
 
-meal_item = get_food("Ground Beef", "food_database.db")
-
-print(meal_item)
+meal = []
+food_item = ask_for_input(meal)
+print (f"{food_item} Inserted")
