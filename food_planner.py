@@ -1,4 +1,5 @@
-from helpers import add_food, display_day, add_food_to_db, hello_fresh
+from helpers import hello_fresh, ask_for_input
+from sqlite_functions import add_food_to_db
 import sqlite3, datetime
 
 """
@@ -12,8 +13,10 @@ This is definitely going to be a constraint propagation problem.  Constraints of
 7.  Breakfast and lunch cannot add food to meals - just adjust quantity.  Can delete foods from a meal.  
 8.  Snacks can add food 
 """
+url = 'https://www.hellofresh.com/recipes/pork-and-veggie-bibimbap-5d920d72192fec454a1a208e?week=2019-W46'
+recipe = hello_fresh(url)
+print (recipe)
 
-hello_fresh(url)
-
-for ingredient in ingredients:
-    add_food(ingredient)
+dinner = []
+for ingredient in dinner:
+    ask_for_input(dinner, ingredient)
